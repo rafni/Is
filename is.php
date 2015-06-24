@@ -30,7 +30,7 @@
  * @author rafni <alberto.rcdb@gmail.com>
  * @category Validator, data validations
  */
-class Validation {
+class Is {
     
     /**
      * Checks whether the international banking were an account is correct
@@ -60,6 +60,75 @@ class Validation {
         } else {
             return false;
         }
+    }
+    
+    /**
+     * Validates that a string is an email
+     * @param string $mail
+     * @return boolean
+     */
+    public static function email($mail) {
+        return filter_var($mail, FILTER_VALIDATE_EMAIL);
+    }
+    
+    /**
+     * That is a valid IP, v4 default
+     * @param string $ip
+     * @return boolean
+     */
+    public static function ip($ip, $flags = FILTER_FLAG_IPV4) {
+        return filter_var($ip, FILTER_VALIDATE_IP, $flags);
+    }
+    
+    /**
+     * Valid URL
+     * @param string $url
+     * @return boolean
+     */
+    public static function url($url, $param) {
+        $flag = isset($param['flag'])? $param['flag'] : 0;
+        return filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED | $flag);
+    }
+    
+    /**
+     * Validates that a number is in a minimum and maximum range
+     * @param int $value
+     * @param array $param min, max
+     */
+    public static function range($value, $param) {
+        $min = isset($param['min']) ? $param['min'] : 0;
+        $max = isset($param['max']) ? $param['max'] : 10;
+        $int_options = array('options' => array('min_range'=>$min, 'max_range'=>$max));
+        return filter_var($value, FILTER_VALIDATE_INT, $int_options);
+    }
+    
+    /**
+     * Validates that a number is an integer
+     * @param int $check
+     * @return boolean
+     */
+    public static function int($check) {
+        return filter_var($check, FILTER_VALIDATE_INT);
+    }
+    
+    /**
+     * Validates if a decimal number
+     * @param string $value
+     * @param array $param
+     * @return boolean
+     */
+    public static function decimal($value, $param) {
+        $decimal = isset($param['decimal'])? $param['decimal'] : ',';
+        return filter_var($value, FILTER_VALIDATE_FLOAT, array('options' => array('decimal' => $decimal)));
+    }
+    
+    /**
+     * Validates it a numerical value
+     * @param mixed $check
+     * @return boolean
+     */
+    public static function numeric($check) {
+        return is_numeric($check);
     }
     
 }
