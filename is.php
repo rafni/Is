@@ -270,4 +270,31 @@ class Is {
         return preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$/', $password);
     }
     
+    /**
+     * Validates string length
+     * @param mixed $value
+     * @param array $param
+     * @return boolean
+     */
+    public static function length($value, $param) {
+        $param = array_merge(array(
+            'min' => 0,
+            'max' => 9e100,
+        ), $param);
+        $length = strlen($value);
+        return ($length >= $param['min'] && $length <= $param['max']);
+    }
+    
+    /**
+     * Validates if a date has the format specified
+     * @param string $value
+     * @param array $param
+     * @return boolean
+     */
+    public static function date($value, $param = null) {
+        $format = isset($param['format'])? $param['format'] : 'Y-m-d';
+        $date = DateTime::createFromFormat($format, $value);
+        return $date && $date->format($format) == $value;
+    }
+    
 }
